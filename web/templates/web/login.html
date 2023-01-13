@@ -1,0 +1,18 @@
+{% extends "web/form.html" %}
+{% block form %}
+    <br>
+    <h2>Log in</h2>
+    <br>
+    {% if message %}
+        <h5>{{ message }}</h5>
+    {% endif %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <center>
+            <button type="submit" class="btn btn-success" style="width: 100%">Log in</button>
+        </center>
+        <br><br>
+    </form>
+{% endblock %}

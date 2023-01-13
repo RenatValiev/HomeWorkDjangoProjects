@@ -1,0 +1,107 @@
+{% extends 'web/base.html' %}
+{% block body %}
+    <br><br><br>
+    {% if from_fav == 'True' %}
+        <a href="{% url 'favorites' %}" class="link-dark" style="padding-left: 20px; text-decoration: none">←More
+            adverts</a>
+    {% else %}
+        <a href="{% url 'adverts_list' %}" class="link-dark" style="padding-left: 20px; text-decoration: none">←More
+            adverts</a>
+    {% endif %}
+
+    {% if user.is_authenticated and advert.user == request.user or request.user.is_superuser %}
+        <span style="padding-left: 70%">
+        <a href="{% url 'edit_advert' advert.id %}" class="btn btn-light">Edit</a>
+        <button class="btn btn-danger" onclick="checkDeleteAdvert({{ advert.id }})">Delete</button>
+    </span>
+    {% endif %}
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8" style="width: 60%; padding-left: 10%; height: 450px">
+                <div style="overflow: hidden">
+                    <img src="{{ advert.image }}"
+                         alt="{{ advert.car.name }}"
+                         style="width: 100%; height: 100%; object-fit: cover; margin: 10px">
+                </div>
+                <br>
+                <div>
+                    <h5>Description</h5>
+                    <p>{{ advert.description }}</p>
+                </div>
+            </div>
+            <div class="col-sm-4" style="padding-left: 5%">
+                <h1>{{ advert.car.name }}</h1>
+                <h4>{{ advert.price }} rub</h4>
+                <br>
+
+                {% if in_favorite is not None %}
+                    <button class="btn btn-lg btn-dark" data-bs-toggle="modal" data-bs-target="#favorite_modal">
+                        {% if not in_favorite %}
+                            Add to favorite
+                        {% else %}
+                            Delete from favorite
+                        {% endif %}
+                    </button>
+                {% endif %}
+
+                <br><br>
+
+                <p>Owner: {{ advert.user.name }}</p>
+                <p>Owner email: {{ advert.user.email }}</p>
+                <p>Mileage: {{ advert.mileage }} km</p>
+                <p>Generation: {{ advert.generation }}</p>
+                <p>Equipment: {{ advert.equipment }}</p>
+                <p>Color: {{ advert.color }}</p>
+                <p>Engine: {{ advert.car.engine }}</p>
+                <p>Power: {{ advert.car.power }} hp</p>
+                <p>Transmission: {{ advert.car.transmission }}</p>
+                <p>Drive: {{ advert.car.drive }}</p>
+                <p>Body type: {{ advert.car.body_type }}</p>
+                <p>Wheel type: {{ advert.car.wheel_type }}</p>
+                <br><br><br>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+
+    <div class="modal fade" id="favorite_modal" tabindex="-1" aria-labelledby="favorite_modal_label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="favorite_modal_label">
+                        {% if not in_favorite %}
+                            Add to favorites
+                        {% else %}
+                            Delete from favorites
+                        {% endif %}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if not in_favorite %}
+                        Would you like to add an advert to your favorites?
+                    {% else %}
+                        Would you like to delete an advert from your favorites?
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    {% if not in_favorite %}
+                        <a href="{% url 'add_to_favorites' advert.id %}" class="btn btn-success">
+                            Confirm
+                        </a>
+                    {% else %}
+                        <a href="{% url 'delete_from_favorites' advert.id %}"
+                           class="btn btn-danger">
+                            Delete
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

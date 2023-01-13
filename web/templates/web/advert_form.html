@@ -1,0 +1,23 @@
+{% extends "web/form.html" %}
+{% block form %}
+    <br>
+    {% if is_add %}
+    <h2>Edit advert</h2>
+    {% else %}
+    <h2>Add advert</h2>
+    {% endif %}
+    <br>
+
+    {% if message %}
+        <h5>{{ message }}</h5>
+    {% endif %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <center>
+            <button type="submit" class="btn btn-success" style="width: 100%">Submit</button>
+        </center>
+        <br><br>
+    </form>
+{% endblock %}
